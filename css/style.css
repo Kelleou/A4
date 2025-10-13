@@ -1,0 +1,21 @@
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #fafafa;
+  color: #333;
+}
+
+.tooltip {
+  font-size: 13px;
+  pointer-events: none;
+  position: absolute;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+}
+
+.legend text {
+  font-size: 12px;
+  fill: #333;
+}
