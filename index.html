@@ -2,12 +2,9 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta
-      name="description"
-      content="Toronto Public Library Circulation Data"
-    />
+    <meta name="description" content="Toronto Public Library Circulation" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Toronto Public Library Circulation Data</title>
+    <title>Toronto Public Library Circulation</title>
 
     <!-- CSS LIBRARIES -->
     <link
@@ -22,9 +19,11 @@
   </head>
   <body>
     <header class="text-center py-4 bg-light shadow-sm mb-4">
-      <h1 class="display-6">
-        Toronto Public Library Circulation by Branch 2022-2023
-      </h1>
+      <h1 class="display-6">Toronto Public Library Circulation (2022–2023)</h1>
+      <p>
+        Explore how library activity changed across age groups and branches
+        between 2022-2023
+      </p>
     </header>
 
     <main class="container">
@@ -32,10 +31,10 @@
         <div class="col-md-9">
           <div class="story-card p-3 mb-3">
             <p class="lead mb-2">
-              Explore how library usage differs across age groups and branches
+              - Explore how library usage differs across age groups and branches
               in Toronto from 2022 to 2023. <br />
-              Switch to stacked chart to see which branches are busiest, and use
-              the bubble chart to compare circulation between the two years.
+              - Switch to stacked chart to see which branches are most active, and
+              use the cluster to compare circulation between the two years.
               <br />
               Dataset Source:
               <a
@@ -43,6 +42,8 @@
               >
                 Toronto Open Data
               </a>
+              <br/>
+              Visualization built with D3.js with Code Development assisted by ChatGPT
             </p>
           </div>
         </div>
@@ -59,17 +60,21 @@
         </div>
       </section>
 
-      <section class="controls text-center mb-3">
-        <button id="toggle-view" class="btn btn-primary me-3">
-          Switch to Stacked Chart
-        </button>
-        <label for="type-select" class="form-label me-2"
-          >Filter by Cardholder Type:</label
-        >
-        <select id="type-select" class="form-select d-inline-block w-auto">
+      <div class="controls text-center mb-3">
+        <label for="type-select">Cardholder Type:</label>
+        <select id="type-select" class="form-select-sm">
           <option value="All">All</option>
         </select>
-      </section>
+
+        <label for="branch-select" class="ms-3">Branch:</label>
+        <select id="branch-select" class="form-select-sm">
+          <option value="All">All</option>
+        </select>
+
+        <button id="toggle-view" class="btn btn-outline-primary btn-sm ms-3">
+          Switch to Stacked Bars
+        </button>
+      </div>
 
       <section id="chart-area" class="chart-area mb-5">
         <h3 class="text-center mb-3">Library Circulation Visualization</h3>
