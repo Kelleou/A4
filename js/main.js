@@ -38,20 +38,24 @@ d3.csv("data/library-circulation-by-cardholder-type.csv").then(data => {
       .text(b);
   });
 
+  // initialize the visualization
   updateVis("All", "All");
 
+  // select card holder type
   d3.select("#type-select").on("change", function () {
     const type = this.value;
     const branch = d3.select("#branch-select").property("value");
     updateVis(type, branch);
   });
 
+  // select branch 
   d3.select("#branch-select").on("change", function () {
     const type = d3.select("#type-select").property("value");
     const branch = this.value;
     highlightBranch(branch);
   });
 
+  // switch between views
   d3.select("#toggle-view").on("click", () => {
     viewMode = viewMode === "cluster" ? "stacked" : "cluster";
     const type = d3.select("#type-select").property("value");
@@ -65,7 +69,6 @@ d3.csv("data/library-circulation-by-cardholder-type.csv").then(data => {
 let clusterData = null;
 let clusterNodes = null;
 
-
 function updateVis(selectedType = "All", selectedBranch = "All") {
   let filtered = allData;
   if (selectedType !== "All") {
@@ -75,6 +78,7 @@ function updateVis(selectedType = "All", selectedBranch = "All") {
   svg.selectAll(".layer").remove();
   svg.selectAll(".legend").remove();
   svg.selectAll(".year-label").remove();
+  svg.selectAll(".total-label").remove();
   svg.selectAll(".node").remove();
   svg.selectAll(".x-axis").remove();
   svg.selectAll(".y-axis").remove();
@@ -179,7 +183,27 @@ function updateVis(selectedType = "All", selectedBranch = "All") {
       .attr("font-size", "16px")
       .attr("font-weight", "bold")
       .text(d => d);
+    const totalByYear = {
+      "2022": d3.sum(filtered.filter(d => d.Year === '2022'), d => d.Circulation),
+      "2023": d3.sum(filtered.filter(d => d.Year === '2023'), d => d.Circulation)
+    };
+    console.log(filtered);
+    console.log(totalByYear);
+    const diff = totalByYear["2023"] - totalByYear["2022"];
+    let pct = totalByYear["2022"] > 0 ? (diff / totalByYear["2022"]) * 100 : 0;
+    pct = Math.round(pct * 100) / 100;
 
+    svg.selectAll(".total-label")
+      .data(["2022", "2023"])
+      .enter()
+      .append("text")
+      .attr("class", "total-label")
+      .attr("x", d => d === "2022" ? width / 4 : (3 * width) / 4)
+      .attr("y", 40)
+      .attr("text-anchor", "middle")
+      .attr("font-size", "13px")
+      .attr("fill", "#555")
+      .text(d => d === "2022" ? `Total Circulation: ${d3.format(",")(totalByYear[d])}` : `Total Circulation: ${d3.format(",")(totalByYear[d])} (${pct} %)`);
     drawLegend(colorScale);
 
     highlightBranch(selectedBranch);
@@ -224,7 +248,7 @@ function updateVis(selectedType = "All", selectedBranch = "All") {
       .range([50, width - 50])
       .padding(0.2);
 
-    const yScale = d3.scaleSqrt()
+    const yScale = d3.scaleLinear()
       .domain([0, d3.max(stackData, d => d.Child + d.Teen + d.Adult)])
       .range([height - 50, 50]);
 
@@ -278,7 +302,6 @@ function highlightBranch(selectedBranch) {
       return d.BranchCode === selectedBranch ? 1 : 0.25;
     });
 
-  tooltip.transition().duration(100).style("opacity", 0);
   svg.selectAll(".annotation").remove();
 
   if (selectedBranch === "All") return;
@@ -306,19 +329,17 @@ function highlightBranch(selectedBranch) {
     const n2022 = nodesData.find(d => d.Year === "2022");
     const n2023 = nodesData.find(d => d.Year === "2023");
 
-
     svg.append("text")
       .attr("class", "annotation")
       .attr("x", (n2022.x + n2023.x) / 2)
       .attr("y", (n2022.y + n2023.y) / 2 - 10)
       .attr("text-anchor", "middle")
-      .attr("font-size", "13px")
+      .attr("font-size", "16px")
       .attr("font-weight", "bold")
       .attr("fill", pct < 0 ? "red" : "green")
       .text(`${pct.toFixed(1)}% ${pct < 0 ? "Ciculation Decrease Compared to 2022" : "Ciculation Increase Compared to 2022"}`);
   }
 
-  
 }
 
 
@@ -328,7 +349,7 @@ function drawLegend(colorScale) {
     .enter()
     .append("g")
     .attr("class", "legend")
-    .attr("transform", (d, i) => `translate(${width - 150}, ${i * 25})`);
+    .attr("transform", (d, i) => `translate(${width - 50}, ${i * 25})`);
 
   legend.append("circle")
     .attr("r", 6)
@@ -345,8 +366,5 @@ function updateTitle(viewMode, type = "All", branch = "All") {
   let baseTitle = viewMode === "cluster"
     ? "Library Circulation by Year"
     : "Top 10 Most Active Branches";
-
-  if (type !== "All") baseTitle += ` — ${type}`;
-  if (branch !== "All") baseTitle += ` @ ${branch}`;
   title.textContent = baseTitle;
 }
