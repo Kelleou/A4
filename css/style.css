@@ -1,3 +1,4 @@
+/* Base styles */
 body {
   font-family: 'Inter', sans-serif;
   background-color: #f7f7f7;
@@ -7,6 +8,7 @@ body {
   padding: 0;
 }
 
+/* Header */
 header {
   background: #f8f9fa;
   padding: 1.5rem 0;
@@ -15,15 +17,17 @@ header {
 }
 
 header h1 {
-  font-weight: 600;
+  font-weight: 700;
   color: #1a1a1a;
   margin: 0;
+  letter-spacing: 1px;
 }
 
+/* Intro text */
 .intro p.lead {
   font-size: 1rem;
   max-width: 700px;
-  margin: auto 0.5rem;
+  margin: 0.5rem auto;
   color: #555;
 }
 
@@ -32,13 +36,17 @@ header h1 {
   color: #777;
 }
 
-.story-card {
-  background: #ffffff;
+/* Cards */
+.story-card, .info-box {
   border-radius: 12px;
   padding: 20px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
   transition: transform 0.2s, box-shadow 0.3s;
   margin-bottom: 1rem;
+}
+
+.story-card {
+  background: #eefdfa;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 
 .story-card p {
@@ -47,14 +55,11 @@ header h1 {
 }
 
 .info-box {
-  background-color: #f0f4f8;
-  border-radius: 12px;
+  background-color: #eefdfa;
   box-shadow: 0 3px 10px rgba(0,0,0,0.06);
   font-size: 0.9rem;
   line-height: 1.5;
   color: #555;
-  padding: 20px;
-  transition: transform 0.2s, box-shadow 0.3s;
 }
 
 .controls {
@@ -64,12 +69,27 @@ header h1 {
 
 .controls button {
   transition: background-color 0.3s, transform 0.2s;
+  cursor: pointer;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  background-color: #69b3a2;
+  color: white;
+  font-weight: 500;
 }
 
+.controls button:hover {
+  background-color: #57a389;
+  transform: translateY(-2px);
+}
 
 select.form-select {
   display: inline-block;
   width: auto;
+  padding: 0.3rem 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background-color: #fff;
 }
 
 .chart-area {
@@ -84,17 +104,18 @@ select.form-select {
 .chart-area h3 {
   color: #333;
   font-weight: 600;
+  margin-bottom: 1rem;
 }
 
 .tooltip {
   font-size: 13px;
   pointer-events: none;
   position: absolute;
-  background: white;
+  background: #ffffff;
   border: 1px solid #ccc;
   border-radius: 6px;
   padding: 8px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
 .legend text {
