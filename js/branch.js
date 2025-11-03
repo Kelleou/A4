@@ -1,9 +1,33 @@
+// branch code and mappings organized and collected from a separate dataset
+let branchMappings = {};
+let postalToBranch = {};
+
+d3.csv("data/tpl-branch-general-information-2023.csv").then(data => {
+  data.forEach(d => {
+    const code = d.BranchCode?.trim();
+    const name = d.BranchName?.trim();
+    const postal = d.PostalCode?.trim();
+
+    if (code && name) {
+      branchMappings[code] = name;
+    }
+
+    if (postal) {
+      const prefix = postal.slice(0, 3);
+      if (!postalToBranch[prefix]) postalToBranch[prefix] = [];
+      if (!postalToBranch[prefix].includes(code)) {
+        postalToBranch[prefix].push(code);
+      }
+    }
+  });
+  const selectedBranchCode = urlParams.get("branch");
+  const selectedBranchName =
+    branchMappings[selectedBranchCode] || selectedBranchCode;
+  document.getElementById("title").textContent = `Branch: ${selectedBranchName}`;
+});
+
 const urlParams = new URLSearchParams(window.location.search);
 const selectedBranch = urlParams.get("branch");
-const selectedBranchCode = urlParams.get("branch");
-const selectedBranchName =
-  branchMappings[selectedBranchCode] || selectedBranchCode;
-document.getElementById("title").textContent = `Branch: ${selectedBranchName}`;
 
 Promise.all([
   d3.csv("data/tpl-card-registrations-annual-by-branch.csv", d3.autoType),
