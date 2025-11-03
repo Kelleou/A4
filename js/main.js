@@ -180,7 +180,6 @@ function updateVis(selectedType = "All", selectedBranch = "All") {
       .on("mouseout", () => {
         tooltip.transition().duration(300).style("opacity", 0);
 
-        // reset highlight
         svg
           .selectAll(".node circle")
           .attr("opacity", 1)
@@ -350,6 +349,9 @@ function updateVis(selectedType = "All", selectedBranch = "All") {
       .attr("y", (d) => yScale(d[1]))
       .attr("height", (d) => yScale(d[0]) - yScale(d[1]))
       .attr("width", x1.bandwidth())
+      .on("click", (event, d) => {
+        window.location.href = `branch.html?branch=${d.data.BranchCode}`;
+      })
       .on("mouseover", function (event, d) {
         svg.selectAll("rect").attr("opacity", 0.25);
         d3.select(this).attr("opacity", 1);
@@ -431,7 +433,6 @@ function highlightBranch(selectedBranch) {
       if (d.Year === "2023") circ2023 = d.Circulation;
     });
   } else {
-    // aggregated view
     nodesData.forEach((d) => {
       if (d.Year === "2022") circ2022 = d.total;
       if (d.Year === "2023") circ2023 = d.total;
@@ -463,7 +464,6 @@ function highlightBranch(selectedBranch) {
 }
 
 function highlightBranches(branchCodes) {
-  // reset everything first
   svg
     .selectAll(".node circle")
     .attr("stroke", "#fff")
@@ -474,7 +474,6 @@ function highlightBranches(branchCodes) {
 
   if (!branchCodes || branchCodes.length === 0) return;
 
-  // highlight nodes matching any of the branch codes
   svg
     .selectAll(".node circle")
     .attr("stroke", (d) =>

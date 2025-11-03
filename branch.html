@@ -6,9 +6,7 @@
     <title>Branch Details</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" />
-
     <link rel="stylesheet" href="css/style.css" />
-
     <script src="https://d3js.org/d3.v7.min.js"></script>
 
     <style>
@@ -39,34 +37,31 @@
             ← Back
         </button>
         <h1 class="display-6" id="title"></h1>
-        <p>Comparing Visits and Card Registrations Over Time</p>
+        <p>Explore trends in branch visits and new library card registrations over time.</p>
     </header>
-
-
 
     <main class="container">
         <section class="row intro mb-4 align-items-center">
             <div class="col-md-9">
                 <div class="story-card p-3 mb-3">
                     <p class="lead mb-2">
-                        - Explore visits and new library card registrations at <strong id="branch-name"></strong> from
-                        2012 to 2023.<br />
-                        - The left chart shows how many people visited the branch each year.<br />
-                        - The right chart shows how many new library cards were issued at this branch each year.<br />
-                        - Dataset Source:<br />
-                        <a href="https://open.toronto.ca/dataset/library-card-registrations/">Library Card
-                            Registrations</a><br />
-                        <a href="https://open.toronto.ca/dataset/library-visits/">Library Visits</a><br />
-                        - Visualization built with D3.js with Code Development assisted by ChatGPT
+                        Explore visits and new library card registrations at
+                        <strong id="branch-name"></strong> from 2012 to 2023.
+                        Use the left chart to explore the number of people that visited the branch each year and
+                        the right chart to see the number of new library cards the branch issued each year.
                     </p>
+                    <p id="correlation-text" class="lead mb-2"></p>
+                    <p id="totals-text" class="lead mb-2"></p>
                 </div>
             </div>
+
             <div class="col-md-3">
                 <div class="info-box">
                     <p>
-                        <strong>Visits:</strong> Total number of people that visited the branch.<br />
-                        <strong>New Cards:</strong> Number of new library cards issued.<br />
-                        <strong>Year:</strong> Includes data from 2012–2023.
+                        Dataset sources: <br />
+                        <a href="https://open.toronto.ca/dataset/library-card-registrations/">Library Card Registrations</a> <br /> 
+                        <a href="https://open.toronto.ca/dataset/library-visits/">Library Visits</a>.<br />
+                        Visualization created with D3.js (with code development assisted by ChatGPT).
                     </p>
                 </div>
             </div>
@@ -76,27 +71,22 @@
     <div class="row g-4">
         <div class="col-md-6">
             <div class="chart-wrapper">
-                <h4 class="text-center mb-3">
-                    Branch Visits Over Time (2012–2023)
-                </h4>
+                <h4 class="text-center mb-3">Branch Visits Over Time (2012–2023)</h4>
                 <div id="chart-visits"></div>
             </div>
         </div>
 
         <div class="col-md-6">
             <div class="chart-wrapper">
-                <h4 class="text-center mb-3">
-                    New Library Card Registrations Over Time (2012–2023)
-                </h4>
+                <h4 class="text-center mb-3">New Library Card Registrations Over Time (2012–2023)</h4>
                 <div id="chart-registrations"></div>
             </div>
         </div>
     </div>
-    </main>
 
     <div class="tooltip" id="scatter-tooltip"></div>
-    <script src="js/postallookup.js"></script>
     <script src="js/branch.js"></script>
+    <script src="js/postallookup.js"></script>
 </body>
 
 </html>

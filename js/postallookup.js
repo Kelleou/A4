@@ -43,7 +43,5 @@ searchBtn.addEventListener("click", () => {
         resultDiv.appendChild(link);
     });
 
-
-    // highlight all matching nodes
-    highlightBranches(branchCodes);
+    // highlightBranches(branchCodes);
 });

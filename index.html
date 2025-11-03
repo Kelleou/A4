@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
   <meta charset="utf-8" />
@@ -9,17 +9,13 @@
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous" />
-
   <link rel="stylesheet" href="css/style.css" />
 </head>
 
 <body>
   <header class="text-center py-4 bg-light shadow-sm mb-4">
     <h1 class="display-6">Toronto Public Library Circulation (2022–2023)</h1>
-    <p>
-      Explore how library activity changed across age groups and branches
-      between 2022-2023
-    </p>
+    <p>Explore how library activity changed across age groups and branches between 2022 and 2023.</p>
   </header>
 
   <main class="container">
@@ -27,39 +23,29 @@
       <div class="col-md-9">
         <div class="story-card p-3 mb-3">
           <p class="lead mb-2">
-            - Explore how library usage differs across age groups and branches
-            in Toronto from 2022 to 2023. <br />
-            - Use the cluster to compare circulation between the two years,
-            you can filter by card holder type or by library branch.
-            <br />
-            - Switch to stacked bar chart view to see which branches are most
-            active.
-            <br />
-            - Dataset Source:
-            <a href="https://open.toronto.ca/dataset/library-circulation-by-cardholder-type/">
-              Toronto Open Data
-            </a>
-            <br />
-            - Visualization built with D3.js with Code Development assisted by
-            ChatGPT
+            Explore library usage across different age groups and branches in Toronto from 2022 to 2023.<br />
+            Use the cluster chart to compare circulation between the two years. You can filter by cardholder type or
+            library branch.<br />
+            Click on a branch or bubble to view more details about activity at that branch.<br />
+            Switch to the stacked bar chart to see which branches were the most active.<br />
+            <strong>Circulation:</strong> All transactions including new checkouts and renewals.<br />
           </p>
         </div>
       </div>
+
       <div class="col-md-3">
         <div class="info-box">
           <p>
-            <strong>Cardholder Type:</strong> Customer age category.<br />
-            <strong>Circulation:</strong> All transactions including initial book
-            checkouts and renewals.<br />
-            <strong>Branch:</strong> The library branch where transaction was
-            processed.
+            Dataset sources: <br />
+            <a href="https://open.toronto.ca/dataset/library-circulation-by-cardholder-type/">Library Circulation Data</a> <br />
+            <a href="https://open.toronto.ca/dataset/library-branch-general-information/">Library Branch General Information</a>.<br />
+            Visualization created with D3.js (with code development assisted by ChatGPT).
           </p>
         </div>
       </div>
     </section>
 
     <div class="controls text-center mb-4">
-
       <div class="d-inline-flex align-items-center mb-3">
         <label for="type-select" class="me-2">Cardholder Type:</label>
         <select id="type-select" class="form-select form-select-sm me-4">
@@ -71,38 +57,32 @@
           <option value="All">All</option>
         </select>
 
-        <button id="toggle-view" class="btn btn-outline-primary btn-sm ms-3">
-          Switch to Stacked Bars
-        </button>
+        <button id="toggle-view" class="btn btn-outline-primary btn-sm ms-3">Switch to Stacked Bars</button>
       </div>
 
       <div class="mt-3">
         <label for="postal-input" class="me-2">Find Your Library Branch:</label>
         <input id="postal-input" class="form-control form-control-sm d-inline-block"
-          placeholder="Enter your postal code e.g. M5V 1A1" style="width: 220px;" />
-        <button id="postal-search" class="btn btn-primary btn-sm ms-2">
-          Go
-        </button>
+          placeholder="Enter your postal code e.g. M1V 1V2" style="width: 300px;" />
+        <button id="postal-search" class="btn btn-primary btn-sm ms-2">Find My Branch</button>
         <div id="branch-result" class="mt-2"></div>
       </div>
-
     </div>
-
 
     <section id="chart-area" class="chart-area mb-5">
       <h3 class="text-center mb-3">Library Circulation Visualization</h3>
     </section>
   </main>
 
-  <!-- embedding JS libraries -->
+  <!-- JS libraries -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
     crossorigin="anonymous"></script>
 
-  <!-- d3 -->
   <script src="https://d3js.org/d3.v7.min.js"></script>
 
-  <!-- Your implementation -->
+  <!-- Your scripts -->
+  <script src="js/branch.js"></script>
   <script src="js/postallookup.js"></script>
   <script src="js/main.js"></script>
 </body>

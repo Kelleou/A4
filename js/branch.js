@@ -24,6 +24,7 @@ d3.csv("data/tpl-branch-general-information-2023.csv").then(data => {
   const selectedBranchName =
     branchMappings[selectedBranchCode] || selectedBranchCode;
   document.getElementById("title").textContent = `Branch: ${selectedBranchName}`;
+  document.getElementById("branch-name").textContent = selectedBranchName;
 });
 
 const urlParams = new URLSearchParams(window.location.search);
@@ -43,6 +44,42 @@ Promise.all([
       Visits: (visits.find((v) => v.Year === r.Year) || {}).Visits,
     }))
     .filter((d) => d.Visits != null);
+  function computeCorrelation(data) {
+
+    const meanReg = d3.mean(data, d => d.Registrations);
+    const meanVisits = d3.mean(data, d => d.Visits);
+
+    const covariance = d3.sum(data, d => (d.Registrations - meanReg) * (d.Visits - meanVisits));
+    const stdReg = Math.sqrt(d3.sum(data, d => Math.pow(d.Registrations - meanReg, 2)));
+    const stdVisits = Math.sqrt(d3.sum(data, d => Math.pow(d.Visits - meanVisits, 2)));
+
+    return covariance / (stdReg * stdVisits);
+  }
+
+  const correlation = computeCorrelation(merged);
+  const correlationRounded = correlation ? correlation.toFixed(2) : null;
+  let correlationText = "";
+  if (correlation === null) {
+    correlationText = "Not enough data to analyze trends.";
+  } else {
+    correlationText = `The correlation between new library cards and visits is ${correlationRounded}. `;
+    if (correlationRounded >= 0) {
+      correlationText += "which suggest this is a positive relationship - when registrations increase, visits also tend to increase.";
+    } else {
+      correlationText += "which suggest this is a negative relationship - when registrations increase, visits tend to decrease.";
+    }
+  }
+
+  const correlationTextEl = document.getElementById("correlation-text");
+  const totalsTextEl = document.getElementById("totals-text");
+
+  correlationTextEl.textContent = correlationText;
+
+  const totalVisits = d3.sum(merged, d => d.Visits);
+  const totalRegs = d3.sum(merged, d => d.Registrations);
+
+  totalsTextEl.textContent = `Total Visits: ${totalVisits.toLocaleString()} | Total New Cards: ${totalRegs.toLocaleString()}`;
+
 
   drawScatter({
     data: merged,
@@ -59,6 +96,7 @@ Promise.all([
     container: "#chart-registrations",
     yLabel: "Registrations",
   });
+
 });
 
 function drawScatter({ data, xKey, yKey, container, yLabel }) {
