@@ -256,7 +256,7 @@ function updateVis(selectedType = "All", selectedBranch = "All") {
       .attr("x", (d) => (d === "2022" ? width / 4 : (3 * width) / 4))
       .attr("y", 40)
       .attr("text-anchor", "middle")
-      .attr("font-size", "13px")
+      .attr("font-size", "15px")
       .attr("fill", "#555")
       .text((d) =>
         d === "2022"
@@ -515,13 +515,14 @@ function drawLegend(colorScale) {
 
   legend
     .append("circle")
-    .attr("r", 6)
+    .attr("r", 8)
     .attr("fill", (d) => (d == "All" ? "#69b3a2" : colorScale(d)));
 
   legend
     .append("text")
     .attr("x", 15)
     .attr("y", 4)
+    .attr("font-size", "18px")
     .text((d) => d);
 }
 
