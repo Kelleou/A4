@@ -22,7 +22,8 @@ let viewMode = "cluster";
 // Load data
 d3.csv("data/library-circulation-by-cardholder-type.csv").then((data) => {
   data.forEach((d) => (d.Circulation = +d.Circulation));
-  allData = data.filter((d) => d.BranchCode !== "VIR");
+  allData = data.filter((d) => d.BranchCode !== "VIR" && branchMappings[d.BranchCode] !== undefined && !branchMappings[d.BranchCode].includes("mobile") && 
+  !branchMappings[d.BranchCode].includes("Answerline") && !branchMappings[d.BranchCode].includes("Literacy") && !branchMappings[d.BranchCode].includes("nterloan"));
 
   const types = Array.from(new Set(allData.map((d) => d.CardholderType)));
   types.forEach((t) => {
@@ -31,7 +32,8 @@ d3.csv("data/library-circulation-by-cardholder-type.csv").then((data) => {
 
   const branches = Array.from(new Set(allData.map((d) => d.BranchCode))).sort();
   branches.forEach((b) => {
-    d3.select("#branch-select").append("option").attr("value", b).text(b);
+    // console.log(branchMappings[b])
+    d3.select("#branch-select").append("option").attr("value", b).text(branchMappings[b]);
   });
 
   updateVis("All", "All");
@@ -76,6 +78,8 @@ function updateVis(selectedType = "All", selectedBranch = "All") {
   svg.selectAll(".node").remove();
   svg.selectAll(".x-axis").remove();
   svg.selectAll(".y-axis").remove();
+  svg.selectAll(".x-label").remove();
+  svg.selectAll(".y-label").remove();
   svg.selectAll(".annotation").remove();
 
   if (simulation && viewMode !== "cluster") simulation.stop();
@@ -155,7 +159,7 @@ function updateVis(selectedType = "All", selectedBranch = "All") {
         let content = "";
         if (selectedType !== "All") {
           content = `
-      <strong>Branch:</strong> ${d.BranchCode}<br/>
+      <strong>Branch:</strong> ${branchMappings[d.BranchCode]} (${d.BranchCode})<br/>
       <strong>Year:</strong> ${d.Year}<br/>
       <strong>${d.CardholderType
             } Circulation:</strong> ${d.Circulation.toLocaleString()}
@@ -165,7 +169,7 @@ function updateVis(selectedType = "All", selectedBranch = "All") {
             .map((t) => `${t.type}: ${t.value.toLocaleString()}`)
             .join("<br/>");
           content = `
-      <strong>Branch:</strong> ${d.BranchCode}<br/>
+      <strong>Branch:</strong> ${branchMappings[d.BranchCode]} (${d.BranchCode})<br/>
       <strong>Year:</strong> ${d.Year}<br/>
       <strong>Total Circulation:</strong> ${d.total.toLocaleString()}<br/>
       ${typeBreakdown}
@@ -237,8 +241,8 @@ function updateVis(selectedType = "All", selectedBranch = "All") {
         (d) => d.Circulation
       ),
     };
-    console.log(filtered);
-    console.log(totalByYear);
+    // console.log(filtered);
+    // console.log(totalByYear);
     const diff = totalByYear["2023"] - totalByYear["2022"];
     let pct = totalByYear["2022"] > 0 ? (diff / totalByYear["2022"]) * 100 : 0;
     pct = Math.round(pct * 100) / 100;
@@ -360,7 +364,7 @@ function updateVis(selectedType = "All", selectedBranch = "All") {
         tooltip
           .html(
             `
-      <strong>Branch:</strong> ${d.data.BranchCode}<br/>
+      <strong>Branch:</strong> ${branchMappings[d.data.BranchCode]} (${d.data.BranchCode})<br/>
       <strong>Year:</strong> ${d.data.Year}<br/>
       <strong>Circulation:</strong> ${(d[1] - d[0]).toLocaleString()}
     `
@@ -395,6 +399,23 @@ function updateVis(selectedType = "All", selectedBranch = "All") {
       .attr("class", "y-axis")
       .attr("transform", `translate(50,0)`)
       .call(d3.axisLeft(yScale));
+
+    svg
+      .append("text")
+      .attr("class", "x-label")
+      .attr("text-anchor", "middle")
+      .attr("font-size", "12px")
+      .attr("x", width / 2)
+      .attr("y", height - 10)
+      .text("Branch");
+
+    svg
+      .append("text")
+      .attr("class", "y-label")
+      .attr("text-anchor", "middle")
+      .attr("font-size", "12px")
+      .attr("transform", `translate(-20,${height / 2}) rotate(-90)`)
+      .text("Total Ciculation");
 
     drawLegend(stackColor);
   }
